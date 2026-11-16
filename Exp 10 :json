@@ -1,0 +1,166 @@
+.json
+[
+    {
+        "id": 1,
+        "name": "Lavanya",
+        "branch": "CSE",
+        "marks": 85
+    },
+    {
+        "id": 2,
+        "name": "Priya",
+        "branch": "IT",
+        "marks": 90
+    },
+    {
+        "id": 3,
+        "name": "Rahul",
+        "branch": "AIML",
+        "marks": 78
+    },
+    {
+        "id": 4,
+        "name": "Sneha",
+        "branch": "CSE",
+        "marks": 92
+    }
+]
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Data Display</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Student Records</h1>
+
+        <button onclick="loadUsingFetch()">Load using Fetch()</button>
+
+        <button onclick="loadUsingJQuery()">Load using jQuery getJSON()</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Branch</th>
+                    <th>Marks</th>
+                </tr>
+            </thead>
+
+            <tbody id="studentData">
+                <tr>
+                    <td colspan="4">Click a button to load data</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+style.css
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.container {
+    width: 80%;
+    margin: 50px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+table {
+    width: 100%;
+    margin-top: 25px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+scriptjs
+// Load JSON using Fetch API
+function loadUsingFetch() {
+
+    fetch("students.json")
+        .then(response => response.json())
+        .then(data => {
+            displayData(data);
+        })
+        .catch(error => {
+            alert("Error loading JSON data");
+            console.log(error);
+        });
+}
+
+
+// Load JSON using jQuery getJSON()
+function loadUsingJQuery() {
+
+    $.getJSON("students.json", function(data) {
+        displayData(data);
+    })
+    .fail(function() {
+        alert("Error loading JSON data");
+    });
+}
+
+
+// Display JSON data dynamically in table
+function displayData(students) {
+
+    let table = "";
+
+    students.forEach(student => {
+
+        table += `
+            <tr>
+                <td>${student.id}</td>
+                <td>${student.name}</td>
+                <td>${student.branch}</td>
+                <td>${student.marks}</td>
+            </tr>
+        `;
+
+    });
+
+    document.getElementById("studentData").innerHTML = table;
+}
