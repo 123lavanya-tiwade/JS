@@ -1,0 +1,163 @@
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>My To-Do List</h1>
+
+        <div class="input-area">
+            <input type="text" id="taskInput"
+            placeholder="Enter your task">
+
+            <button onclick="addTask()">Add Task</button>
+        </div>
+
+        <ul id="taskList"></ul>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+style.css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf2f8;
+    text-align: center;
+    padding: 40px;
+}
+
+.container {
+    background: white;
+    width: 450px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px gray;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+.input-area {
+    display: flex;
+    gap: 8px;
+}
+
+input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    min-width: 0;
+}
+
+button {
+    padding: 10px 12px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+li {
+    background: #f2f7fc;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.task-text {
+    flex: 1;
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.edit {
+    background: #27ae60;
+}
+
+.delete {
+    background: #e74c3c;
+}
+
+script.js
+
+// Add Task Function
+function addTask() {
+
+    let input = document.getElementById("taskInput");
+    let task = input.value.trim();
+
+    if (task === "") {
+        alert("Please enter a task!");
+        return;
+    }
+
+    // Create new list element
+    let li = document.createElement("li");
+
+    let span = document.createElement("span");
+    span.className = "task-text";
+    span.textContent = task;
+
+    // Edit Button
+    let editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.className = "edit";
+
+    editBtn.onclick = function() {
+
+        let newTask = prompt("Edit your task:", span.textContent);
+
+        if (newTask !== null && newTask.trim() !== "") {
+            span.textContent = newTask.trim();
+        }
+    };
+
+    // Delete Button
+    let deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.className = "delete";
+
+    deleteBtn.onclick = function() {
+
+        // DOM Traversal
+        let parent = deleteBtn.parentElement;
+
+        // Remove task
+        parent.remove();
+    };
+
+    // Append elements
+    li.appendChild(span);
+    li.appendChild(editBtn);
+    li.appendChild(deleteBtn);
+
+    // Add task to list
+    document.getElementById("taskList").appendChild(li);
+
+    input.value = "";
+}
