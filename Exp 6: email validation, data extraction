@@ -1,0 +1,175 @@
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Validator and Text Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Text Analyzer</h1>
+
+        <h3>Email Validation</h3>
+
+        <input type="text" id="email"
+        placeholder="Enter your email">
+
+        <button onclick="validateEmail()">
+            Validate Email
+        </button>
+
+        <div id="emailResult"></div>
+
+        <hr>
+
+        <h3>Text Analysis and Data Extraction</h3>
+
+        <textarea id="text"
+        placeholder="Enter your text here"></textarea>
+
+        <button onclick="analyzeText()">
+            Analyze Text
+        </button>
+
+        <div id="textResult"></div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+style.css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf2f8;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    background: white;
+    width: 450px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px gray;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+h3 {
+    color: #3498db;
+}
+
+input, textarea {
+    width: 95%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid gray;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #21618c;
+}
+
+#emailResult, #textResult {
+    margin-top: 15px;
+    text-align: left;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+script.js
+
+// Email Validation using Regex
+function validateEmail() {
+
+    let email = document.getElementById("email").value.trim();
+
+    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email === "") {
+        document.getElementById("emailResult").innerHTML =
+            "Please enter an email address.";
+    }
+    else if (pattern.test(email)) {
+        document.getElementById("emailResult").innerHTML =
+            "Valid Email Address!";
+    }
+    else {
+        document.getElementById("emailResult").innerHTML =
+            "Invalid Email Address!";
+    }
+}
+
+
+// Text Analysis and Data Extraction
+function analyzeText() {
+
+    let text = document.getElementById("text").value;
+
+    if (text.trim() === "") {
+        document.getElementById("textResult").innerHTML =
+            "Please enter some text.";
+        return;
+    }
+
+    // String Methods
+    let upper = text.toUpperCase();
+    let lower = text.toLowerCase();
+    let words = text.trim().split(/\s+/);
+    let characters = text.length;
+
+    // Regex for Email Extraction
+    let emails = text.match(
+        /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g
+    ) || [];
+
+    // Regex for Number Extraction
+    let numbers = text.match(/\d+/g) || [];
+
+    // Regex for Word Extraction
+    let extractedWords = text.match(/[a-zA-Z]+/g) || [];
+
+    // Display Results
+    document.getElementById("textResult").innerHTML = `
+        <h3>Text Analysis Result</h3>
+
+        <b>Uppercase:</b> ${upper}<br>
+        <b>Lowercase:</b> ${lower}<br>
+        <b>Total Words:</b> ${words.length}<br>
+        <b>Total Characters:</b> ${characters}<br>
+
+        <b>Extracted Emails:</b> ${emails.join(", ") || "None"}<br>
+
+        <b>Extracted Numbers:</b> ${numbers.join(", ") || "None"}<br>
+
+        <b>Extracted Words:</b> ${extractedWords.join(", ") || "None"}
+    `;
+}
