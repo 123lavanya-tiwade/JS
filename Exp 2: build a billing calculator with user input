@@ -1,0 +1,149 @@
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Billing Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Billing Calculator</h1>
+
+        <label>Customer Name:</label>
+        <input type="text" id="name" placeholder="Enter your name">
+
+        <label>Product Name:</label>
+        <input type="text" id="product" placeholder="Enter product name">
+
+        <label>Quantity:</label>
+        <input type="number" id="quantity" placeholder="Enter quantity">
+
+        <label>Price per Item (₹):</label>
+        <input type="number" id="price" placeholder="Enter price">
+
+        <button onclick="calculateBill()">Generate Bill</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+
+style.css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf2f8;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    background: white;
+    width: 400px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px gray;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-top: 12px;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #21618c;
+}
+
+#result {
+    margin-top: 20px;
+    text-align: left;
+    color: #2c3e50;
+    line-height: 1.8;
+}
+
+
+script.js
+
+function calculateBill() {
+
+    // Using var
+    var shopName = "My Shopping Store";
+
+    // Using let
+    let customer = document.getElementById("name").value;
+    let product = document.getElementById("product").value;
+    let quantity = Number(document.getElementById("quantity").value);
+    let price = Number(document.getElementById("price").value);
+
+    // Using const
+    const GST = 18;
+
+    if (customer === "" || product === "" ||
+        quantity <= 0 || price <= 0) {
+        alert("Please enter valid details!");
+        return;
+    }
+
+    // Destructuring
+    const [itemName, itemQuantity, itemPrice] =
+        [product, quantity, price];
+
+    let subtotal = itemQuantity * itemPrice;
+    let gstAmount = subtotal * GST / 100;
+    let total = subtotal + gstAmount;
+
+    // Template Literals
+    let bill = `
+        <h2>${shopName}</h2>
+        <hr>
+        <b>Customer:</b> ${customer}<br>
+        <b>Product:</b> ${itemName}<br>
+        <b>Quantity:</b> ${itemQuantity}<br>
+        <b>Price:</b> ₹${itemPrice}<br>
+        <hr>
+        <b>Subtotal:</b> ₹${subtotal.toFixed(2)}<br>
+        <b>GST (18%):</b> ₹${gstAmount.toFixed(2)}<br>
+        <h3>Total Amount: ₹${total.toFixed(2)}</h3>
+        <p>Thank you for shopping!</p>
+    `;
+
+    document.getElementById("result").innerHTML = bill;
+
+    console.log("Customer:", customer);
+    console.log("Subtotal:", subtotal);
+    console.log("GST:", gstAmount);
+    console.log("Total Bill:", total);
+}
