@@ -1,0 +1,241 @@
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gym Admission Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Gym Admission Form</h1>
+
+        <form id="gymForm">
+
+            <label>Full Name:</label>
+            <input type="text" id="name"
+            placeholder="Enter your name">
+            <small id="nameError"></small>
+
+            <label>Email Address:</label>
+            <input type="text" id="email"
+            placeholder="Enter your email">
+            <small id="emailError"></small>
+
+            <label>Mobile Number:</label>
+            <input type="text" id="phone"
+            placeholder="Enter 10 digit mobile number">
+            <small id="phoneError"></small>
+
+            <label>Age:</label>
+            <input type="number" id="age"
+            placeholder="Enter your age">
+            <small id="ageError"></small>
+
+            <label>Membership Plan:</label>
+            <select id="plan">
+                <option value="">Select Plan</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Yearly">Yearly</option>
+            </select>
+            <small id="planError"></small>
+
+            <button type="submit">Submit Admission</button>
+
+        </form>
+
+        <div id="result"></div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+
+style.css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf2f8;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    background: white;
+    width: 400px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px gray;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-top: 12px;
+}
+
+input, select {
+    width: 95%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+small {
+    display: block;
+    color: red;
+    text-align: left;
+    margin-top: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #21618c;
+}
+
+#result {
+    margin-top: 20px;
+    color: green;
+    font-weight: bold;
+}
+
+script.js
+
+// Access Form Fields
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const ageInput = document.getElementById("age");
+const planInput = document.getElementById("plan");
+
+// Validation Function
+function validateName() {
+
+    let name = nameInput.value.trim();
+
+    if (name === "") {
+        document.getElementById("nameError").innerHTML =
+            "Name is required!";
+        return false;
+    }
+
+    document.getElementById("nameError").innerHTML = "";
+    return true;
+}
+
+function validateEmail() {
+
+    let email = emailInput.value.trim();
+
+    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!pattern.test(email)) {
+        document.getElementById("emailError").innerHTML =
+            "Enter a valid email!";
+        return false;
+    }
+
+    document.getElementById("emailError").innerHTML = "";
+    return true;
+}
+
+function validatePhone() {
+
+    let phone = phoneInput.value.trim();
+
+    let pattern = /^[0-9]{10}$/;
+
+    if (!pattern.test(phone)) {
+        document.getElementById("phoneError").innerHTML =
+            "Enter a valid 10 digit number!";
+        return false;
+    }
+
+    document.getElementById("phoneError").innerHTML = "";
+    return true;
+}
+
+function validateAge() {
+
+    let age = Number(ageInput.value);
+
+    if (ageInput.value === "" || age < 18 || age > 60) {
+        document.getElementById("ageError").innerHTML =
+            "Age must be between 18 and 60!";
+        return false;
+    }
+
+    document.getElementById("ageError").innerHTML = "";
+    return true;
+}
+
+function validatePlan() {
+
+    if (planInput.value === "") {
+        document.getElementById("planError").innerHTML =
+            "Please select a membership plan!";
+        return false;
+    }
+
+    document.getElementById("planError").innerHTML = "";
+    return true;
+}
+
+// Live Input Events
+nameInput.addEventListener("input", validateName);
+emailInput.addEventListener("input", validateEmail);
+phoneInput.addEventListener("input", validatePhone);
+ageInput.addEventListener("input", validateAge);
+planInput.addEventListener("change", validatePlan);
+
+// Form Submit Event
+document.getElementById("gymForm").addEventListener(
+    "submit", function(event) {
+
+        event.preventDefault();
+
+        let valid =
+            validateName() &&
+            validateEmail() &&
+            validatePhone() &&
+            validateAge() &&
+            validatePlan();
+
+        if (valid) {
+
+            document.getElementById("result").innerHTML =
+                "Congratulations! Gym Admission Successful.";
+
+            alert("Form Submitted Successfully!");
+
+            this.reset();
+        }
+        else {
+            document.getElementById("result").innerHTML = "";
+        }
+    }
+);
