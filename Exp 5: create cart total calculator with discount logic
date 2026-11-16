@@ -1,0 +1,167 @@
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Shopping Cart</h1>
+
+        <h2>Available Products</h2>
+
+        <div id="products"></div>
+
+        <button onclick="calculateTotal()">
+            Calculate Cart Total
+        </button>
+
+        <div id="result"></div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+
+style.css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf2f8;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    background: white;
+    width: 450px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px gray;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+.product {
+    background: #f2f7fc;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+button {
+    background: #3498db;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    background: #21618c;
+}
+
+#result {
+    margin-top: 20px;
+    text-align: left;
+    line-height: 1.8;
+}
+
+script.js
+
+// Array of Product Objects
+const cart = [
+    { name: "Laptop", price: 50000, quantity: 1 },
+    { name: "Mouse", price: 500, quantity: 2 },
+    { name: "Keyboard", price: 1000, quantity: 1 },
+    { name: "Headphones", price: 2000, quantity: 1 }
+];
+
+// Display Products
+function displayProducts() {
+
+    let output = "";
+
+    // forEach() method
+    cart.forEach(function(item, index) {
+
+        output += `
+            <div class="product">
+                <input type="checkbox"
+                id="item${index}" checked>
+
+                <b>${item.name}</b><br>
+                Price: ₹${item.price}<br>
+                Quantity: ${item.quantity}
+            </div>
+        `;
+    });
+
+    document.getElementById("products").innerHTML = output;
+}
+
+// Calculate Cart Total
+function calculateTotal() {
+
+    // filter() method
+    const selectedItems = cart.filter(function(item, index) {
+        return document.getElementById("item" + index).checked;
+    });
+
+    // map() method
+    const itemTotals = selectedItems.map(function(item) {
+        return item.price * item.quantity;
+    });
+
+    // reduce() method
+    const subtotal = itemTotals.reduce(function(total, price) {
+        return total + price;
+    }, 0);
+
+    // Discount Logic
+    let discount = 0;
+
+    if (subtotal >= 50000) {
+        discount = subtotal * 0.20;
+    }
+    else if (subtotal >= 10000) {
+        discount = subtotal * 0.10;
+    }
+    else if (subtotal >= 5000) {
+        discount = subtotal * 0.05;
+    }
+
+    const finalTotal = subtotal - discount;
+
+    // Display Result
+    document.getElementById("result").innerHTML = `
+        <hr>
+        <h3>Cart Summary</h3>
+        Subtotal: ₹${subtotal.toFixed(2)}<br>
+        Discount: ₹${discount.toFixed(2)}<br>
+        <h2>Final Total: ₹${finalTotal.toFixed(2)}</h2>
+        <p>Thank you for shopping!</p>
+    `;
+
+    console.log("Selected Items:", selectedItems);
+    console.log("Subtotal:", subtotal);
+    console.log("Discount:", discount);
+    console.log("Final Total:", finalTotal);
+}
+
+// Call function
+displayProducts();
