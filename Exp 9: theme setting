@@ -1,0 +1,154 @@
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Theme Preference Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Theme Preference Manager</h1>
+
+        <p>Select Your Theme</p>
+
+        <button onclick="setTheme('light')">
+            Light Mode
+        </button>
+
+        <button onclick="setTheme('dark')">
+            Dark Mode
+        </button>
+
+        <hr>
+
+        <h3>Storage Options</h3>
+
+        <button onclick="saveLocal()">
+            Save in LocalStorage
+        </button>
+
+        <button onclick="saveSession()">
+            Save in SessionStorage
+        </button>
+
+        <button onclick="clearStorage()">
+            Clear Preferences
+        </button>
+
+        <h3 id="message">Welcome User!</h3>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+style.css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    color: #222;
+    text-align: center;
+    padding: 50px;
+    transition: 0.3s;
+}
+
+.container {
+    background-color: white;
+    width: 450px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px gray;
+}
+
+button {
+    padding: 12px;
+    margin: 8px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #21618c;
+}
+
+/* Dark Theme */
+
+body.dark {
+    background-color: #222;
+    color: white;
+}
+
+body.dark .container {
+    background-color: #333;
+    color: white;
+}
+
+script.js
+
+// Set Theme
+function setTheme(theme) {
+
+    if (theme === "dark") {
+        document.body.classList.add("dark");
+    }
+    else {
+        document.body.classList.remove("dark");
+    }
+
+    document.getElementById("message").innerHTML =
+        theme + " theme selected!";
+}
+
+// Save Theme in LocalStorage
+function saveLocal() {
+
+    let theme = document.body.classList.contains("dark")
+        ? "dark" : "light";
+
+    localStorage.setItem("theme", theme);
+
+    alert("Theme saved in LocalStorage!");
+}
+
+// Save Theme in SessionStorage
+function saveSession() {
+
+    let theme = document.body.classList.contains("dark")
+        ? "dark" : "light";
+
+    sessionStorage.setItem("theme", theme);
+
+    alert("Theme saved in SessionStorage!");
+}
+
+// Clear Storage
+function clearStorage() {
+
+    localStorage.removeItem("theme");
+    sessionStorage.removeItem("theme");
+
+    setTheme("light");
+
+    alert("Preferences cleared!");
+}
+
+// Load Saved Theme
+window.onload = function() {
+
+    let theme = localStorage.getItem("theme") ||
+                sessionStorage.getItem("theme") ||
+                "light";
+
+    setTheme(theme);
+};
