@@ -1,0 +1,148 @@
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Grading System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+style.css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf2f8;
+    text-align: center;
+    padding: 40px;
+}
+
+.container {
+    background-color: white;
+    width: 400px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px gray;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-top: 15px;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #21618c;
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+    <div class="container">
+        <h1>Student Grading System</h1>
+
+        <form onsubmit="calculateGrade(event)">
+
+            <label>Student Name:</label>
+            <input type="text" id="name" placeholder="Enter student name">
+
+            <label>Enter Marks (Out of 100):</label>
+            <input type="number" id="marks" placeholder="Enter marks">
+
+            <button type="submit">Calculate Grade</button>
+
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+script.js
+
+function calculateGrade(event) {
+
+    event.preventDefault();
+
+    let name = document.getElementById("name").value.trim();
+    let marks = document.getElementById("marks").value;
+    let result = document.getElementById("result");
+
+    // Form Validation
+    if (name === "" || marks === "") {
+        result.innerHTML = "Please fill all fields!";
+        result.style.color = "red";
+        return;
+    }
+
+    marks = Number(marks);
+
+    if (marks < 0 || marks > 100) {
+        result.innerHTML = "Enter marks between 0 and 100!";
+        result.style.color = "red";
+        return;
+    }
+
+    let grade;
+
+    // Control Structures
+    if (marks >= 90) {
+        grade = "A+";
+    }
+    else if (marks >= 80) {
+        grade = "A";
+    }
+    else if (marks >= 70) {
+        grade = "B";
+    }
+    else if (marks >= 60) {
+        grade = "C";
+    }
+    else if (marks >= 40) {
+        grade = "D";
+    }
+    else {
+        grade = "F (Fail)";
+    }
+
+    result.style.color = "green";
+
+    result.innerHTML =
+        "Student Name: " + name +
+        "<br>Marks: " + marks +
+        "<br>Grade: " + grade;
+}
+
