@@ -1,0 +1,220 @@
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Class Scheduler</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Class Scheduler</h1>
+        <p id="clock">Current Time: --:--:--</p>
+
+        <div class="card">
+            <h2>Upcoming Class</h2>
+            <h3 id="subject">Web Technology</h3>
+            <p id="time">Class Time: 09:00 AM</p>
+
+            <div id="countdown">Loading countdown...</div>
+
+            <p id="status">Waiting for class...</p>
+        </div>
+
+        <button id="startBtn">Start Scheduler</button>
+        <button id="stopBtn">Stop Scheduler</button>
+
+        <p class="note">Countdown updates automatically every second.</p>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
+
+style.css
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #dbeafe, #e9d5ff);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    width: 100%;
+    max-width: 550px;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #5b21b6;
+}
+
+#clock {
+    font-size: 18px;
+    color: #555;
+}
+
+.card {
+    background: #f3e8ff;
+    padding: 25px;
+    margin: 25px 0;
+    border-radius: 12px;
+}
+
+#countdown {
+    font-size: 30px;
+    font-weight: bold;
+    color: #6d28d9;
+    margin: 20px 0;
+}
+
+#status {
+    font-weight: bold;
+    color: #15803d;
+}
+
+button {
+    padding: 12px 20px;
+    margin: 8px;
+    border: none;
+    border-radius: 7px;
+    background: #7c3aed;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #5b21b6;
+}
+
+.note {
+    color: #777;
+    font-size: 13px;
+}
+
+@media (max-width: 500px) {
+    .container {
+        padding: 18px;
+    }
+
+    #countdown {
+        font-size: 24px;
+    }
+
+    button {
+        width: 100%;
+        margin: 6px 0;
+    }
+}
+
+timer.js
+export function updateClock() {
+    const now = new Date();
+
+    document.getElementById("clock").innerText =
+        "Current Time: " + now.toLocaleTimeString();
+}
+
+export function startCountdown(targetTime) {
+
+    const now = new Date();
+    const difference = targetTime - now;
+
+    if (difference <= 0) {
+        return "00:00:00";
+    }
+
+    const hours = Math.floor(difference / 3600000);
+    const minutes = Math.floor((difference % 3600000) / 60000);
+    const seconds = Math.floor((difference % 60000) / 1000);
+
+    return (
+        String(hours).padStart(2, "0") + ":" +
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0")
+    );
+}
+
+export function showMessage() {
+    document.getElementById("status").innerText =
+        "Your class is starting soon!";
+}
+
+script.js
+import { updateClock, startCountdown, showMessage } from "./timer.js";
+
+let interval;
+let timeout;
+
+const subject = "Web Technology";
+
+let classTime = new Date();
+classTime.setHours(23, 59, 59, 0);
+
+document.getElementById("subject").innerText = subject;
+
+document.getElementById("time").innerText =
+    "Class Time: " + classTime.toLocaleTimeString();
+
+function startScheduler() {
+
+    clearInterval(interval);
+    clearTimeout(timeout);
+
+    document.getElementById("status").innerText =
+        "Waiting for class...";
+
+    function update() {
+        updateClock();
+
+        const remaining = startCountdown(classTime);
+
+        document.getElementById("countdown").innerText = remaining;
+
+        if (classTime - new Date() <= 0) {
+            clearInterval(interval);
+
+            document.getElementById("countdown").innerText =
+                "00:00:00";
+
+            document.getElementById("status").innerText =
+                "Class is now in progress!";
+        }
+    }
+
+    update();
+
+    interval = setInterval(update, 1000);
+
+    timeout = setTimeout(() => {
+        showMessage();
+    }, Math.max(0, classTime - new Date() - 60000));
+}
+
+function stopScheduler() {
+    clearInterval(interval);
+    clearTimeout(timeout);
+
+    document.getElementById("status").innerText =
+        "Scheduler stopped.";
+
+    document.getElementById("countdown").innerText =
+        "Stopped";
+}
+
+document.getElementById("startBtn").addEventListener("click", startScheduler);
+document.getElementById("stopBtn").addEventListener("click", stopScheduler);
+
+updateClock();
